@@ -1,98 +1,31 @@
-{% extends 'base.html' %}
+{% extends "base.html"%}
+{% load blog_extras %}
 {% block content %}
-<h2>
-  Index Template
-</h2>
-  <div class="alert alert-success" role="alert">
-    A simple alert success!
-  </div>
-  <div class="alert alert-danger" role="alert">
-    A simple alert danger!
-  </div>
-  <div class="alert alert-warning" role="alert">
-    A simple alert warning!
-  </div>
-
-  <button class="btn btn-primary">Primary</button>
-  <a class="btn btn-secondary">Secondary</a>
-  <button class="btn btn-danger">Danger</button>
-
-  <h3>Dropdown</h3>
-  <div class="dropdown">
-    <button class="btn btn-warning dropdown-toggle" id="dropdownMenuButton1" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-      Check this out!
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-      <li><a class="dropdown-item" href="#">First option!</a></li>
-      <li><a class="dropdown-item" href="#">Second option!</a></li>
-      <li><a class="dropdown-item" href="#">Third option!</a></li>
-    </ul>
-  </div>
-
-  <h3>Modal</h3>
-  <button type="button" class="btn btn primary" data-bs-toggle="modal" data-bs-target="#first-modal">Show Modal!</button>
-  <div class="modal" id="first-modal" tabindex="-1" aria-labelledby="first-modal-label" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="first-modal-label">Check this modal out!</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-labelledby="Close"></button>
-        </div>
-        <div class="modal-body">
-          Modal Body...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-        </div>
+    <h2>Blog Posts</h2>
+    {% for post in posts %}
+    <div class="row">
+      <div class="col">
+        <h3>{{ post.title }}</h3>
+        <small>By {{ post.author | author_details:request.user }}</small>
+        <p>{{ post.summary }}</p>
+        <small>
+          ({{ post.content | wordcount }} words)
+          <a href="#">Read more!</a>
+        </small>
       </div>
     </div>
-  </div>
-
-  <h3>Navbar</h3>
-    <nav class="navbar navbar-expand-sm navbar-light bg-light">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">Navbar</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Link</a>
-                </li>
-            </ul>
+    {% endfor%}
+    {% for post in posts %}
+    <div class="row">
+        <div class="col">
+            <h3>{{ post.title }}</h3>
+            <small>By {{ post.author | author_details:request.user }} on {{ post.published_at|date:"M, d Y" }}</small>
+            <p>{{ post.summary }}</p>
+            <p>
+                ({{ post.content|wordcount }} words)
+                <a href="#">Read More</a>
+            </p>
         </div>
     </div>
-</nav>
-
-<h3>Pagination</h3>
-<ul class="pagination">
-    <li class="page-item disabled">
-        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item active" aria-current="page">
-        <a class="page-link" href="#">2</a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-        <a class="page-link" href="#">Next</a>
-    </li>
-</ul>
-
-<h3>Gird system</h3>
-<div class="row">
-    <div class="col-6 bg-primary">Column 1</div>
-    <div class="col bg-danger">Column 2</div>
-    <div class="col bg-success">Column 3</div>
-</div>
-
-  
-
-
+    {% endfor %}
 {% endblock %}
