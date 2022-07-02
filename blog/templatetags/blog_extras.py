@@ -2,20 +2,24 @@ from django.contrib.auth import get_user_model
 from django import template
 from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
+from blog.models import Post
 
 
 
 register = template.Library()
 user_model = get_user_model()
 
-@register.filter
-def author_details(author, curr_user):
+@register.simple_tag(takes_context = True)
+def author_details(context):
+  request = context['request']
+  curr_user = request.user
+  post = context['post']
+  author = post.author
   
   if not isinstance(author, user_model):
     return ""
 
   if curr_user == author:
-    print(curr_user.email)
     return format_html('<strong>me</strong>')
 
   if author.first_name and author.last_name:
@@ -31,3 +35,20 @@ def author_details(author, curr_user):
     prefix, suffix = "", ""
 
   return format_html('{}{}{}', prefix, name, suffix)
+
+@register.simple_tag
+def row(extra_classes=""):
+  return format_html('<div class="row {}">', extra_classes)
+
+@register.simple_tag
+def col(extra_classes=""):
+  return format_html('<div class="col {}">', extra_classes)
+
+@register.simple_tag
+def enddiv():
+  return format_html('</div>')
+
+@register.inclusion_tag("blog/post-list.html")
+def recent_posts(post):
+  posts = Post.objects.exclude(pk = post.pk)[:5]
+  return {"title" : "Recent Posts", "posts": posts}
