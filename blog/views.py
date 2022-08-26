@@ -3,6 +3,7 @@ import logging
 from django.utils import timezone
 from blog.models import Post
 from .forms import CommentForm
+from django.views.decorators.cache import cache_page
 
 
 logger = logging.getLogger(__name__)
